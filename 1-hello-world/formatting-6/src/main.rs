@@ -1,5 +1,15 @@
 use std::fmt::{self, Formatter, Display};
 
+/*
+    Formatting in various number systems:-
+
+    1. Decimal:- format!("{}", foo)
+
+    2. Hexadecimal:- format!("0x{:X}", foo)
+
+    3. Octal:- format!("0o{:o}", foo)
+*/
+
 struct City {
     name: &'static str,
     
@@ -16,9 +26,8 @@ impl Display for City {
         let lat_c = if self.lat >= 0.0 { 'N' } else { 'S' };
         let lon_c = if self.lon >= 0.0 { 'E' } else { 'W' };
 
-        // `write!` is like `format!`, but it will write the formatted string
-        // into a buffer (the first argument)
-        write!(f, "{}: {:.3}°{} {:.3}°{}", self.name, self.lat.abs(), lat_c, self.lon.abs(), lon_c)
+        write!(f, "{}: {:.3}°{} {:.3}°{}", self.name, self.lat.abs(), lat_c, self.lon.abs(), lon_c);
+        Ok(())
     }
 }
 
@@ -32,19 +41,12 @@ struct Color {
 impl Display for Color {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         write!(f, "RGB ({red}, {green}, {blue}) 0x{red:02X}{green:02X}{blue:02X}", 
-               red=&self.red, green=&self.green, blue=&self.blue)
+              red=self.red, green=self.green, blue=self.blue);
+        Ok(())
     }
 }
 
 fn main() {
-    let foo = 3735928559i64;
-
-    // Hex formatting
-    println!("0x{:X}", foo);
-
-    // Octal formatting
-    println!("0o{:o}", foo);
-
     for city in [
         City { name: "Dublin", lat: 53.347778, lon: -6.259722 },
         City { name: "Oslo", lat: 59.95, lon: 10.75 },
@@ -52,12 +54,13 @@ fn main() {
     ].iter() {
         println!("{}", *city);
     }
-
     for color in [
         Color { red: 128, green: 255, blue: 90 },
         Color { red: 0, green: 3, blue: 254 },
         Color { red: 0, green: 0, blue: 0 },
     ].iter() {
+        // Switch this to use {} once you've added an implementation
+        // for fmt::Display.
         println!("{}", *color);
     }
 }
